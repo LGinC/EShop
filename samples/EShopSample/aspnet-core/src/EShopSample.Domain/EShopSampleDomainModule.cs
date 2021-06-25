@@ -1,7 +1,11 @@
 ﻿using EasyAbp.EShop;
 using EasyAbp.EShop.Plugins.Baskets;
+using EasyAbp.EShop.Plugins.Coupons;
 using EasyAbp.PaymentService;
 using EasyAbp.PaymentService.Payments;
+using EasyAbp.PaymentService.Prepayment;
+using EasyAbp.PaymentService.Prepayment.Options;
+using EasyAbp.PaymentService.Prepayment.PaymentService;
 using EasyAbp.PaymentService.WeChatPay;
 using EShopSample.MultiTenancy;
 using EShopSample.ObjectExtending;
@@ -34,8 +38,10 @@ namespace EShopSample
         typeof(AbpTenantManagementDomainModule),
         typeof(EShopDomainModule),
         typeof(EShopPluginsBasketsDomainModule),
+        typeof(EShopPluginsCouponsDomainModule),
         typeof(PaymentServiceDomainModule),
-        typeof(PaymentServiceWeChatPayDomainModule)
+        typeof(PaymentServiceWeChatPayDomainModule),
+        typeof(PaymentServicePrepaymentDomainModule)
     )]
     public class EShopSampleDomainModule : AbpModule
     {
@@ -50,6 +56,8 @@ namespace EShopSample
             {
                 options.IsEnabled = MultiTenancyConsts.IsEnabled;
             });
+
+            ConfigurePaymentServicePrepayment();
         }
         
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
@@ -58,6 +66,18 @@ namespace EShopSample
 
             resolver.TryRegisterProvider(FreePaymentServiceProvider.PaymentMethod, typeof(FreePaymentServiceProvider));
             resolver.TryRegisterProvider(WeChatPayPaymentServiceProvider.PaymentMethod, typeof(WeChatPayPaymentServiceProvider));
+            resolver.TryRegisterProvider(PrepaymentPaymentServiceProvider.PaymentMethod, typeof(PrepaymentPaymentServiceProvider));
+        }
+        
+        private void ConfigurePaymentServicePrepayment()
+        {
+            Configure<PaymentServicePrepaymentOptions>(options =>
+            {
+                options.AccountGroups.Configure<DefaultAccountGroup>(accountGroup =>
+                {
+                    accountGroup.Currency = "CNY";
+                });
+            });
         }
     }
 }

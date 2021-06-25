@@ -2,11 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using Volo.Abp.ObjectExtending;
 
 namespace EasyAbp.EShop.Plugins.Baskets.BasketItems.Dtos
 {
     [Serializable]
-    public class CreateBasketItemDto : IValidatableObject
+    public class CreateBasketItemDto : ExtensibleObject
     {
         public string BasketName { get; set; } = BasketsConsts.DefaultBasketName;
         
@@ -15,16 +16,16 @@ namespace EasyAbp.EShop.Plugins.Baskets.BasketItems.Dtos
         /// </summary>
         public Guid? UserId { get; set; }
         
-        public Guid StoreId { get; set; }
-
         public Guid ProductId { get; set; }
 
         public Guid ProductSkuId { get; set; }
         
         public int Quantity { get; set; }
         
-        public new IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        public override IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
+            base.Validate(validationContext);
+            
             if (Quantity <= 0)
             {
                 yield return new ValidationResult(

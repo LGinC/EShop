@@ -1,14 +1,19 @@
+using JetBrains.Annotations;
 using System;
 using System.Collections.Generic;
-using EasyAbp.EShop.Products.ProductDetails;
-using JetBrains.Annotations;
 using Volo.Abp.Domain.Entities.Auditing;
+using Volo.Abp.MultiTenancy;
 
 namespace EasyAbp.EShop.Products.Products
 {
-    public class Product : FullAuditedAggregateRoot<Guid>, IProduct
+    public class Product : FullAuditedAggregateRoot<Guid>, IProduct, IMultiTenant
     {
-        public virtual Guid ProductTypeId { get; protected set; }
+        public virtual Guid? TenantId { get; protected set; }
+        
+        public virtual Guid StoreId { get; protected set; }
+
+        [NotNull]
+        public virtual string ProductGroupName { get; protected set; }
         
         public virtual Guid ProductDetailId { get; protected set; }
 
@@ -22,9 +27,6 @@ namespace EasyAbp.EShop.Products.Products
         
         [CanBeNull]
         public virtual string MediaResources { get; protected set; }
-        
-        [CanBeNull]
-        public virtual string SpecifiedInventoryProviderName { get; protected set; }
 
         public virtual int DisplayOrder { get; protected set; }
 
@@ -44,29 +46,31 @@ namespace EasyAbp.EShop.Products.Products
 
         public Product(
             Guid id,
-            Guid productTypeId,
+            Guid? tenantId,
+            Guid storeId,
+            [NotNull] string productGroupName,
             Guid productDetailId,
-            [CanBeNull] string code,
+            [CanBeNull] string uniqueName,
             [NotNull] string displayName,
             InventoryStrategy inventoryStrategy,
             bool isPublished,
             bool isStatic,
             bool isHidden,
             [CanBeNull] string mediaResources,
-            [CanBeNull] string specifiedInventoryProviderName,
             int displayOrder
         ) : base(id)
         {
-            ProductTypeId = productTypeId;
+            TenantId = tenantId;
+            StoreId = storeId;
+            ProductGroupName = productGroupName;
             ProductDetailId = productDetailId;
-            UniqueName = code?.Trim();
+            UniqueName = uniqueName?.Trim();
             DisplayName = displayName;
             InventoryStrategy = inventoryStrategy;
             IsPublished = isPublished;
             IsStatic = isStatic;
             IsHidden = isHidden;
             MediaResources = mediaResources;
-            SpecifiedInventoryProviderName = specifiedInventoryProviderName;
             DisplayOrder = displayOrder;
             
             ProductAttributes = new List<ProductAttribute>();
@@ -79,7 +83,7 @@ namespace EasyAbp.EShop.Products.Products
             ProductSkus ??= new List<ProductSku>();
         }
 
-        public void TrimCode()
+        public void TrimUniqueName()
         {
             UniqueName = UniqueName?.Trim();
         }

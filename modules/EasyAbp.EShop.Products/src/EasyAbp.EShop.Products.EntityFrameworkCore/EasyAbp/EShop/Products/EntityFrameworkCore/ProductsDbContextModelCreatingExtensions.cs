@@ -1,9 +1,7 @@
 using EasyAbp.EShop.Products.ProductInventories;
 using EasyAbp.EShop.Products.ProductDetailHistories;
 using EasyAbp.EShop.Products.ProductHistories;
-using EasyAbp.EShop.Products.ProductStores;
 using EasyAbp.EShop.Products.ProductCategories;
-using EasyAbp.EShop.Products.ProductTypes;
 using EasyAbp.EShop.Products.Categories;
 using EasyAbp.EShop.Products.Products;
 using System;
@@ -55,7 +53,7 @@ namespace EasyAbp.EShop.Products.EntityFrameworkCore
                 b.ConfigureByConvention(); 
                 /* Configure more properties here */
                 
-                b.HasIndex(x => x.UniqueName).IsUnique();
+                b.HasIndex(x => x.UniqueName);
             });
             
             builder.Entity<ProductDetail>(b =>
@@ -94,26 +92,13 @@ namespace EasyAbp.EShop.Products.EntityFrameworkCore
                 b.ConfigureByConvention(); 
                 /* Configure more properties here */
 
+                // Todo: soft delete support?
                 b.HasIndex(x => x.UniqueName).IsUnique();
-            });
-
-            builder.Entity<ProductType>(b =>
-            {
-                b.ToTable(options.TablePrefix + "ProductTypes", options.Schema);
-                b.ConfigureByConvention(); 
-                /* Configure more properties here */
             });
 
             builder.Entity<ProductCategory>(b =>
             {
                 b.ToTable(options.TablePrefix + "ProductCategories", options.Schema);
-                b.ConfigureByConvention(); 
-                /* Configure more properties here */
-            });
-
-            builder.Entity<ProductStore>(b =>
-            {
-                b.ToTable(options.TablePrefix + "ProductStores", options.Schema);
                 b.ConfigureByConvention(); 
                 /* Configure more properties here */
             });
@@ -144,6 +129,20 @@ namespace EasyAbp.EShop.Products.EntityFrameworkCore
                 /* Configure more properties here */
 
                 b.HasIndex(x => x.ProductSkuId);
+            });
+
+
+            builder.Entity<ProductView>(b =>
+            {
+                b.ToTable(options.TablePrefix + "ProductViews", options.Schema);
+                b.ConfigureByConvention(); 
+
+                /* Configure more properties here */
+                
+                b.HasIndex(x => x.UniqueName);
+                
+                b.Property(x => x.MinimumPrice).HasColumnType("decimal(20,8)");
+                b.Property(x => x.MaximumPrice).HasColumnType("decimal(20,8)");
             });
         }
     }

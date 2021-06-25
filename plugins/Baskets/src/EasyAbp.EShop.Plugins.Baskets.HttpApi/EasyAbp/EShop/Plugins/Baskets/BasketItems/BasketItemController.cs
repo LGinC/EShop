@@ -8,8 +8,8 @@ using Volo.Abp.Application.Dtos;
 
 namespace EasyAbp.EShop.Plugins.Baskets.BasketItems
 {
-    [RemoteService(Name = "EShopPluginsBaskets")]
-    [Route("/api/eShop/plugins/baskets/basketItem")]
+    [RemoteService(Name = "EasyAbpEShopPluginsBaskets")]
+    [Route("/api/e-shop/plugins/baskets/basket-item")]
     public class BasketItemController : BasketsController, IBasketItemAppService
     {
         private readonly IBasketItemAppService _service;
@@ -53,7 +53,7 @@ namespace EasyAbp.EShop.Plugins.Baskets.BasketItems
         }
 
         [HttpDelete]
-        [Route("inBulk")]
+        [Route("in-bulk")]
         public Task DeleteInBulkAsync(IEnumerable<Guid> ids)
         {
             return _service.DeleteInBulkAsync(ids);

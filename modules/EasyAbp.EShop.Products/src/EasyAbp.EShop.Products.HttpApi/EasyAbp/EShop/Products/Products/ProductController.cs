@@ -7,8 +7,8 @@ using Volo.Abp.Application.Dtos;
 
 namespace EasyAbp.EShop.Products.Products
 {
-    [RemoteService(Name = "EShopProducts")]
-    [Route("/api/eShop/products/product")]
+    [RemoteService(Name = "EasyAbpEShopProducts")]
+    [Route("/api/e-shop/products/product")]
     public class ProductController : ProductsController, IProductAppService
     {
         private readonly IProductAppService _service;
@@ -19,15 +19,7 @@ namespace EasyAbp.EShop.Products.Products
         }
 
         [HttpGet]
-        [Route("{id}/abandoned")]
-        [RemoteService(false)]
-        public Task<ProductDto> GetAsync(Guid id)
-        {
-            return _service.GetAsync(id);
-        }
-
-        [HttpGet]
-        public Task<PagedResultDto<ProductDto>> GetListAsync(GetProductListDto input)
+        public Task<PagedResultDto<ProductDto>> GetListAsync(GetProductListInput input)
         {
             return _service.GetListAsync(input);
         }
@@ -46,53 +38,52 @@ namespace EasyAbp.EShop.Products.Products
         }
 
         [HttpDelete]
-        [Route("{id}/abandoned")]
-        [RemoteService(false)]
+        [Route("{id}")]
         public Task DeleteAsync(Guid id)
         {
             return _service.DeleteAsync(id);
         }
 
-        [HttpDelete]
-        [Route("{id}")]
-        public Task DeleteAsync(Guid id, Guid storeId)
-        {
-            return _service.DeleteAsync(id, storeId);
-        }
-
         [HttpPost]
-        [Route("sku")]
-        public Task<ProductDto> CreateSkuAsync(Guid productId, Guid storeId, CreateProductSkuDto input)
+        [Route("{id}/sku")]
+        public Task<ProductDto> CreateSkuAsync(Guid id, CreateProductSkuDto input)
         {
-            return _service.CreateSkuAsync(productId, storeId, input);
+            return _service.CreateSkuAsync(id, input);
         }
 
         [HttpPut]
-        [Route("sku")]
-        public Task<ProductDto> UpdateSkuAsync(Guid productId, Guid productSkuId, Guid storeId, UpdateProductSkuDto input)
+        [Route("{id}/sku/{productSkuId}")]
+        public Task<ProductDto> UpdateSkuAsync(Guid id, Guid productSkuId, UpdateProductSkuDto input)
         {
-            return _service.UpdateSkuAsync(productId, productSkuId, storeId, input);
+            return _service.UpdateSkuAsync(id, productSkuId, input);
         }
 
         [HttpGet]
         [Route("{id}")]
-        public Task<ProductDto> GetAsync(Guid id, Guid storeId)
+        public Task<ProductDto> GetAsync(Guid id)
         {
-            return _service.GetAsync(id, storeId);
+            return _service.GetAsync(id);
         }
 
         [HttpGet]
-        [Route("byCode/{storeId}")]
-        public Task<ProductDto> GetByCodeAsync(string code, Guid storeId)
+        [Route("by-code/{code}")]
+        public Task<ProductDto> GetByCodeAsync(Guid storeId, string code)
         {
-            return _service.GetByCodeAsync(code, storeId);
+            return _service.GetByCodeAsync(storeId, code);
         }
 
         [HttpDelete]
-        [Route("sku")]
-        public Task<ProductDto> DeleteSkuAsync(Guid productId, Guid productSkuId, Guid storeId)
+        [Route("{id}/sku/{productSkuId}")]
+        public Task<ProductDto> DeleteSkuAsync(Guid id, Guid productSkuId)
         {
-            return _service.DeleteSkuAsync(productId, productSkuId, storeId);
+            return _service.DeleteSkuAsync(id, productSkuId);
+        }
+
+        [HttpGet]
+        [Route("product-group")]
+        public Task<ListResultDto<ProductGroupDto>> GetProductGroupListAsync()
+        {
+            return _service.GetProductGroupListAsync();
         }
     }
 }

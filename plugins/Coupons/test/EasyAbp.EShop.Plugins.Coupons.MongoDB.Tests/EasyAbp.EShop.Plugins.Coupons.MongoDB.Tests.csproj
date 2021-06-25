@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="..\..\..\..\common.props" />
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <RootNamespace />
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.8.3" />
+    <PackageReference Include="Mongo2Go" Version="2.2.14" />
+    <ProjectReference Include="..\..\src\EasyAbp.EShop.Plugins.Coupons.MongoDB\EasyAbp.EShop.Plugins.Coupons.MongoDB.csproj" />
+    <ProjectReference Include="..\EasyAbp.EShop.Plugins.Coupons.TestBase\EasyAbp.EShop.Plugins.Coupons.TestBase.csproj" />
+  </ItemGroup>
+
+</Project>

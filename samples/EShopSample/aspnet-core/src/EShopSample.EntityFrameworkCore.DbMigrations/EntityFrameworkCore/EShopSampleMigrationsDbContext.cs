@@ -1,6 +1,8 @@
 ﻿using EasyAbp.EShop.EntityFrameworkCore;
 using EasyAbp.EShop.Plugins.Baskets.EntityFrameworkCore;
+using EasyAbp.EShop.Plugins.Coupons.EntityFrameworkCore;
 using EasyAbp.PaymentService.EntityFrameworkCore;
+using EasyAbp.PaymentService.Prepayment.EntityFrameworkCore;
 using EasyAbp.PaymentService.WeChatPay.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Volo.Abp.AuditLogging.EntityFrameworkCore;
@@ -50,9 +52,11 @@ namespace EShopSample.EntityFrameworkCore
             builder.ConfigureEShop();
             
             builder.ConfigureEShopPluginsBaskets();
+            builder.ConfigureEShopPluginsCoupons();
 
             builder.ConfigurePaymentService();
             builder.ConfigurePaymentServiceWeChatPay();
+            builder.ConfigurePaymentServicePrepayment();
         }
     }
 }

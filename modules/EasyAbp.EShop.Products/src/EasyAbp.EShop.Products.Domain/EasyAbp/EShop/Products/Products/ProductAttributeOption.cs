@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using JetBrains.Annotations;
+using Volo.Abp.Data;
 using Volo.Abp.Domain.Entities.Auditing;
 
 namespace EasyAbp.EShop.Products.Products
@@ -14,7 +16,13 @@ namespace EasyAbp.EShop.Products.Products
         
         public virtual int DisplayOrder { get; protected set; }
 
-        protected ProductAttributeOption() {}
+        public virtual ExtraPropertyDictionary ExtraProperties { get; protected set; }
+
+        protected ProductAttributeOption()
+        {
+            ExtraProperties = new ExtraPropertyDictionary();
+            this.SetDefaultsForExtraProperties();
+        }
         
         public ProductAttributeOption(
             Guid id,
@@ -25,6 +33,9 @@ namespace EasyAbp.EShop.Products.Products
             DisplayName = displayName;
             Description = description;
             DisplayOrder = displayOrder;
+            
+            ExtraProperties = new ExtraPropertyDictionary();
+            this.SetDefaultsForExtraProperties();
         }
     }
 }

@@ -7,8 +7,8 @@ using Volo.Abp.Application.Dtos;
 
 namespace EasyAbp.EShop.Products.ProductHistories
 {
-    [RemoteService(Name = "EShopProducts")]
-    [Route("/api/eShop/products/productHistory")]
+    [RemoteService(Name = "EasyAbpEShopProducts")]
+    [Route("/api/e-shop/products/product-history")]
     public class ProductHistoryController : ProductsController, IProductHistoryAppService
     {
         private readonly IProductHistoryAppService _service;
@@ -32,7 +32,7 @@ namespace EasyAbp.EShop.Products.ProductHistories
         }
 
         [HttpGet]
-        [Route("byTime/{productId}")]
+        [Route("by-time/{productId}")]
         public Task<ProductHistoryDto> GetByTimeAsync(Guid productId, DateTime modificationTime)
         {
             return _service.GetByTimeAsync(productId, modificationTime);

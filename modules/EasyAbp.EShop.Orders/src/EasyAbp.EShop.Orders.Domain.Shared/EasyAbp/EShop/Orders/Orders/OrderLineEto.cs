@@ -1,4 +1,5 @@
 ﻿using System;
+using Volo.Abp.Data;
 
 namespace EasyAbp.EShop.Orders.Orders
 {
@@ -15,8 +16,10 @@ namespace EasyAbp.EShop.Orders.Orders
         
         public DateTime ProductDetailModificationTime { get; set; }
         
-        public string ProductTypeUniqueName { get; set; }
+        public string ProductGroupName { get; set; }
         
+        public string ProductGroupDisplayName { get; set; }
+
         public string ProductUniqueName { get; set; }
 
         public string ProductDisplayName { get; set; }
@@ -34,7 +37,15 @@ namespace EasyAbp.EShop.Orders.Orders
         public decimal TotalPrice { get; set; }
         
         public decimal TotalDiscount { get; set; }
+        
+        public decimal ActualTotalPrice { get; set; }
 
         public int Quantity { get; set; }
+        
+        public int RefundedQuantity { get; set; }
+        
+        public decimal RefundAmount { get; set; }
+        
+        public ExtraPropertyDictionary ExtraProperties { get; set; }
     }
 }

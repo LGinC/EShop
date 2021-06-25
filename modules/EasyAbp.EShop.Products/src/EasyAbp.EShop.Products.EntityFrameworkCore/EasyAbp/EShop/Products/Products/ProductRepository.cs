@@ -1,5 +1,7 @@
 using System;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using EasyAbp.EShop.Products.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Volo.Abp.Domain.Repositories.EntityFrameworkCore;
@@ -13,43 +15,52 @@ namespace EasyAbp.EShop.Products.Products
         {
         }
 
-        public override IQueryable<Product> WithDetails()
+        public override async Task<Product> UpdateAsync(Product entity, bool autoSave = false, CancellationToken cancellationToken = new CancellationToken())
         {
-            return base.WithDetails()
+            await CheckUniqueNameAsync(entity, cancellationToken);
+
+            return await base.UpdateAsync(entity, autoSave, cancellationToken);
+        }
+
+        public override async Task<Product> InsertAsync(Product entity, bool autoSave = false, CancellationToken cancellationToken = new CancellationToken())
+        {
+            await CheckUniqueNameAsync(entity, cancellationToken);
+
+            return await base.InsertAsync(entity, autoSave, cancellationToken);
+        }
+
+        public virtual async Task CheckUniqueNameAsync(Product entity, CancellationToken cancellationToken = new CancellationToken())
+        {
+            if (entity.UniqueName.IsNullOrEmpty())
+            {
+                return;
+            }
+            
+            if (await (await GetDbSetAsync()).AnyAsync(
+                x => x.StoreId == entity.StoreId && x.UniqueName == entity.UniqueName && x.Id != entity.Id,
+                cancellationToken))
+            {
+                throw new DuplicatedProductUniqueNameException(entity.UniqueName);
+            }
+        }
+
+        public override async Task<IQueryable<Product>> WithDetailsAsync()
+        {
+            return (await base.WithDetailsAsync())
                 .Include(x => x.ProductAttributes).ThenInclude(x => x.ProductAttributeOptions)
                 .Include(x => x.ProductSkus);
         }
 
-        public IQueryable<Product> GetQueryable(Guid storeId, Guid categoryId)
+        public IQueryable<Product> GetQueryable(Guid categoryId)
         {
-            return JoinProductCategories(GetQueryable(storeId), categoryId);
-        }
-        
-        public IQueryable<Product> GetQueryable(Guid storeId)
-        {
-            return JoinProductStores(GetQueryable(), storeId);
-        }
-        
-        public IQueryable<Product> WithDetails(Guid storeId, Guid categoryId)
-        {
-            return JoinProductCategories(WithDetails(storeId), categoryId);
-        }
-        
-        public IQueryable<Product> WithDetails(Guid storeId)
-        {
-            return JoinProductStores(WithDetails(), storeId);
+            return JoinProductCategories(DbSet, categoryId);
         }
 
-        protected virtual IQueryable<Product> JoinProductStores(IQueryable<Product> queryable, Guid storeId)
+        public IQueryable<Product> WithDetails(Guid categoryId)
         {
-            return queryable.Join(
-                DbContext.ProductStores.Where(productStore => productStore.StoreId == storeId),
-                product => product.Id,
-                productStore => productStore.ProductId,
-                (product, productStore) => product
-            );
+            return JoinProductCategories(WithDetails(), categoryId);
         }
-        
+
         protected virtual IQueryable<Product> JoinProductCategories(IQueryable<Product> queryable, Guid categoryId)
         {
             return queryable.Join(

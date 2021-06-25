@@ -7,8 +7,8 @@ using Volo.Abp.Application.Dtos;
 
 namespace EasyAbp.EShop.Products.ProductCategories
 {
-    [RemoteService(Name = "EShopProducts")]
-    [Route("/api/eShop/products/productCategory")]
+    [RemoteService(Name = "EasyAbpEShopProducts")]
+    [Route("/api/e-shop/products/product-category")]
     public class ProductCategoryController : ProductsController, IProductCategoryAppService
     {
         private readonly IProductCategoryAppService _service;

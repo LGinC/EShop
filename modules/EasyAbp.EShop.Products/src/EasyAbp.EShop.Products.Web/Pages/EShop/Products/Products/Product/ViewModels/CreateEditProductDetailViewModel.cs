@@ -12,8 +12,8 @@ namespace EasyAbp.EShop.Products.Web.Pages.EShop.Products.Products.Product.ViewM
     public class CreateEditProductDetailViewModel
     {
         [HiddenInput]
-        [Display(Name = "ProductStore")]
-        public Guid StoreId { get; set; }
+        [Display(Name = "ProductDetailStoreId")]
+        public Guid? StoreId { get; set; }
         
         [TextArea(Rows = 4)]
         [Display(Name = "ProductDetailDescription")]

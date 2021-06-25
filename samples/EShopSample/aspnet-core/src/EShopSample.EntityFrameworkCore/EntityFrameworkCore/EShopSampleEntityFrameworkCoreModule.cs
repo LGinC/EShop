@@ -1,6 +1,8 @@
 ﻿using EasyAbp.EShop.EntityFrameworkCore;
 using EasyAbp.EShop.Plugins.Baskets.EntityFrameworkCore;
+using EasyAbp.EShop.Plugins.Coupons.EntityFrameworkCore;
 using EasyAbp.PaymentService.EntityFrameworkCore;
+using EasyAbp.PaymentService.Prepayment.EntityFrameworkCore;
 using EasyAbp.PaymentService.WeChatPay.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AuditLogging.EntityFrameworkCore;
@@ -30,8 +32,10 @@ namespace EShopSample.EntityFrameworkCore
         typeof(AbpFeatureManagementEntityFrameworkCoreModule),
         typeof(EShopEntityFrameworkCoreModule),
         typeof(EShopPluginsBasketsEntityFrameworkCoreModule),
+        typeof(EShopPluginsCouponsEntityFrameworkCoreModule),
         typeof(PaymentServiceEntityFrameworkCoreModule),
-        typeof(PaymentServiceWeChatPayEntityFrameworkCoreModule)
+        typeof(PaymentServiceWeChatPayEntityFrameworkCoreModule),
+        typeof(PaymentServicePrepaymentEntityFrameworkCoreModule)
     )]
     public class EShopSampleEntityFrameworkCoreModule : AbpModule
     {

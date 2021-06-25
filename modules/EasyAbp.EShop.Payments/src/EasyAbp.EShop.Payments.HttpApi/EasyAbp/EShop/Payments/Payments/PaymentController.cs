@@ -7,8 +7,8 @@ using Volo.Abp.Application.Dtos;
 
 namespace EasyAbp.EShop.Payments.Payments
 {
-    [RemoteService(Name = "EShopPayments")]
-    [Route("/api/eShop/payments/payment")]
+    [RemoteService(Name = "EasyAbpEShopPayments")]
+    [Route("/api/e-shop/payments/payment")]
     public class PaymentController : PaymentsController, IPaymentAppService
     {
         private readonly IPaymentAppService _service;

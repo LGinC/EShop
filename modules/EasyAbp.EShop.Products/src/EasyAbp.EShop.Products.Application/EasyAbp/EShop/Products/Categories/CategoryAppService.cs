@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Dynamic.Core;
 using System.Threading.Tasks;
 using EasyAbp.EShop.Products.Categories.Dtos;
 using EasyAbp.EShop.Products.Permissions;
@@ -25,24 +27,46 @@ namespace EasyAbp.EShop.Products.Categories
             _repository = repository;
         }
 
-        protected override IQueryable<Category> CreateFilteredQuery(GetCategoryListDto input)
+        protected override async Task<IQueryable<Category>> CreateFilteredQueryAsync(GetCategoryListDto input)
         {
-            var query =  base.CreateFilteredQuery(input);
+            var query = (await base.CreateFilteredQueryAsync(input)).Where(x => x.ParentId == input.ParentId);
             
             return input.ShowHidden ? query : query.Where(x => !x.IsHidden);
         }
 
         public override async Task<PagedResultDto<CategoryDto>> GetListAsync(GetCategoryListDto input)
         {
-            // Todo: Check if current user is an admin of the store.
-            var isCurrentUserStoreAdmin = true && await AuthorizationService.IsGrantedAsync(ProductsPermissions.Categories.Default);
-            
-            if (input.ShowHidden && !isCurrentUserStoreAdmin)
+            if (input.ShowHidden && !await AuthorizationService.IsGrantedAsync(ProductsPermissions.Categories.ShowHidden))
             {
                 throw new NotAllowedToGetCategoryListWithShowHiddenException();
             }
             
             return await base.GetListAsync(input);
+        }
+
+        public virtual async Task<PagedResultDto<CategorySummaryDto>> GetSummaryListAsync(GetCategoryListDto input)
+        {
+            await CheckGetListPolicyAsync();
+            
+            var query = _repository.AsQueryable();
+            
+            var totalCount = await AsyncExecuter.CountAsync(query);
+
+            query = query.OrderBy(x => x.Code);
+            
+            if (!input.Sorting.IsNullOrWhiteSpace())
+            {
+                query = query.OrderBy(input.Sorting);
+            }
+            
+            query = query.PageBy(input.SkipCount, input.MaxResultCount);
+
+            var categories = await AsyncExecuter.ToListAsync(query);
+
+            return new PagedResultDto<CategorySummaryDto>(
+                totalCount,
+                categories.Select(x => ObjectMapper.Map<Category, CategorySummaryDto>(x)).ToList()
+            );
         }
     }
 }

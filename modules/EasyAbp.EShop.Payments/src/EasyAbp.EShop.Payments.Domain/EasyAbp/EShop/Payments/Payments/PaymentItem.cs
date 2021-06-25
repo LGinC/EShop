@@ -8,18 +8,15 @@ using Volo.Abp.Domain.Entities.Auditing;
 
 namespace EasyAbp.EShop.Payments.Payments
 {
-    public class PaymentItem : FullAuditedEntity<Guid>, IPaymentItem, IHasExtraProperties, IMultiStore
+    public class PaymentItem : FullAuditedEntity<Guid>, IPaymentItem, IMultiStore
     {
         #region Base properties
 
         [NotNull]
         public virtual string ItemType { get; protected set; }
         
-        public virtual Guid ItemKey { get; protected set; }
-        
-        [NotNull]
-        public virtual string Currency { get; protected set; }
-        
+        public virtual string ItemKey { get; protected set; }
+
         public virtual decimal OriginalPaymentAmount { get; protected set; }
 
         public virtual decimal PaymentDiscount { get; protected set; }
@@ -30,7 +27,7 @@ namespace EasyAbp.EShop.Payments.Payments
         
         public virtual decimal PendingRefundAmount { get; protected set; }
         
-        public virtual Dictionary<string, object> ExtraProperties { get; protected set; }
+        public virtual ExtraPropertyDictionary ExtraProperties { get; protected set; }
 
         #endregion
         
@@ -43,7 +40,8 @@ namespace EasyAbp.EShop.Payments.Payments
         
         private PaymentItem()
         {
-            ExtraProperties = new Dictionary<string, object>();
+            ExtraProperties = new ExtraPropertyDictionary();
+            this.SetDefaultsForExtraProperties();
         }
     }
 }

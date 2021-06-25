@@ -1,6 +1,9 @@
 ﻿using EasyAbp.EShop;
+using EasyAbp.EShop.Orders.Plugins.Coupons;
 using EasyAbp.EShop.Plugins.Baskets;
+using EasyAbp.EShop.Plugins.Coupons;
 using EasyAbp.PaymentService;
+using EasyAbp.PaymentService.Prepayment;
 using EasyAbp.PaymentService.WeChatPay;
 using Volo.Abp.Account;
 using Volo.Abp.AutoMapper;
@@ -22,8 +25,11 @@ namespace EShopSample
         typeof(AbpFeatureManagementApplicationModule),
         typeof(EShopApplicationModule),
         typeof(EShopPluginsBasketsApplicationModule),
+        typeof(EShopPluginsCouponsApplicationModule),
+        typeof(EShopOrdersPluginsCouponsModule),
         typeof(PaymentServiceApplicationModule),
-        typeof(PaymentServiceWeChatPayApplicationModule)
+        typeof(PaymentServiceWeChatPayApplicationModule),
+        typeof(PaymentServicePrepaymentApplicationModule)
     )]
     public class EShopSampleApplicationModule : AbpModule
     {

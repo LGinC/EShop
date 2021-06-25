@@ -1,30 +1,37 @@
 using System;
-using System.Threading.Tasks;
+using EasyAbp.EShop.Stores.StoreOwners;
+using EasyAbp.EShop.Stores.StoreOwners.Dtos;
 using EasyAbp.EShop.Stores.Stores;
 using Microsoft.AspNetCore.Mvc;
+using System.Linq;
+using System.Threading.Tasks;
+using EasyAbp.EShop.Products.Web.Pages.EShop.Products.Products.Product.ViewModels;
 
 namespace EasyAbp.EShop.Products.Web.Pages.EShop.Products.Products.Product
 {
     public class IndexModel : ProductsPageModel
     {
         private readonly IStoreAppService _storeAppService;
+        private readonly IStoreOwnerAppService _storeOwnerAppService;
 
         [BindProperty(SupportsGet = true)]
-        public Guid StoreId { get; set; }
-        
-        [BindProperty(SupportsGet = true)]
-        public Guid? CategoryId { get; set; }
-        
+        public ProductListFilterViewModel Filter { get; set; }
+
         public string StoreName { get; set; }
         
-        public IndexModel(IStoreAppService storeAppService)
+        public IndexModel(IStoreAppService storeAppService,
+            IStoreOwnerAppService storeOwnerAppService)
         {
             _storeAppService = storeAppService;
+            _storeOwnerAppService = storeOwnerAppService;
         }
-        
+
         public virtual async Task OnGetAsync()
         {
-            StoreName = (await _storeAppService.GetAsync(StoreId)).Name;
+            if (Filter.StoreId.HasValue)
+            {
+                StoreName = (await _storeAppService.GetAsync(Filter.StoreId.Value)).Name;
+            }
         }
     }
 }

@@ -1,29 +1,33 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using EasyAbp.Abp.TagHelperPlus.EasySelector;
 using EasyAbp.EShop.Products.Products;
-using EasyAbp.EShop.Products.Products.Dtos;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form;
 
 namespace EasyAbp.EShop.Products.Web.Pages.EShop.Products.Products.Product.ViewModels
 {
-    public class CreateEditProductViewModel
+    public class CreateEditProductViewModel : IValidatableObject
     {
         [HiddenInput]
-        [Display(Name = "ProductStore")]
+        [Display(Name = "ProductStoreId")]
         public Guid StoreId { get; set; }
-
+        
         [Required]
-        [SelectItems("ProductTypes")]
-        [Display(Name = "ProductType")]
-        public Guid ProductTypeId { get; set; }
+        [SelectItems("ProductGroups")]
+        [Display(Name = "ProductProductGroupName")]
+        public string ProductGroupName { get; set; }
 
-        [SelectItems("Categories")]
+        // [SelectItems("Categories")]
+        [EasySelector(
+            getListedDataSourceUrl: ProductsConsts.GetCategorySummaryListedDataSourceUrl,
+            getSingleDataSourceUrl: ProductsConsts.GetCategorySummarySingleDataSourceUrl,
+            keyPropertyName: "id",
+            textPropertyName: "displayName")]
         [Display(Name = "ProductCategory")]
         public List<Guid> CategoryIds { get; set; }
-        
+
         [Display(Name = "ProductUniqueName")]
         public string UniqueName { get; set; }
         
@@ -53,11 +57,18 @@ namespace EasyAbp.EShop.Products.Web.Pages.EShop.Products.Products.Product.ViewM
         [Display(Name = "ProductMediaResources")]
         public string MediaResources { get; set; }
         
-        [Placeholder("KeepEmptyIfDoNotKnow")]
-        [Display(Name = "ProductSpecifiedInventoryProviderName")]
-        public string SpecifiedInventoryProviderName { get; set; }
-        
         [Display(Name = "ProductIsPublished")]
         public bool IsPublished { get; set; }
+
+        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        {
+            if (StoreId != ProductDetail.StoreId)
+            {
+                yield return new ValidationResult(
+                    "The StoreId should be same as the ProductDetail.StoreId.",
+                    new[] {"StoreId"}
+                );
+            }
+        }
     }
 }

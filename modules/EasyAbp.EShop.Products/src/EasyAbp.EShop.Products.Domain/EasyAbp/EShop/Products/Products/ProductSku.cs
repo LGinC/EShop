@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using JetBrains.Annotations;
+using Volo.Abp.Data;
 using Volo.Abp.Domain.Entities.Auditing;
 
 namespace EasyAbp.EShop.Products.Products
@@ -25,13 +27,16 @@ namespace EasyAbp.EShop.Products.Products
         
         [CanBeNull]
         public virtual string MediaResources { get; protected set; }
-        
-        [CanBeNull]
-        public virtual string SpecifiedInventoryProviderName { get; protected set; }
-        
-        public Guid? ProductDetailId { get; set; }
 
-        protected ProductSku() {}
+        public virtual Guid? ProductDetailId { get; protected set; }
+        
+        public virtual ExtraPropertyDictionary ExtraProperties { get; protected set; }
+
+        protected ProductSku()
+        {
+            ExtraProperties = new ExtraPropertyDictionary();
+            this.SetDefaultsForExtraProperties();
+        }
         
         public ProductSku(
             Guid id,
@@ -43,7 +48,6 @@ namespace EasyAbp.EShop.Products.Products
             int orderMinQuantity,
             int orderMaxQuantity,
             [CanBeNull] string mediaResources,
-            [CanBeNull] string specifiedInventoryProviderName,
             Guid? productDetailId) : base(id)
         {
             SerializedAttributeOptionIds = serializedAttributeOptionIds;
@@ -54,11 +58,13 @@ namespace EasyAbp.EShop.Products.Products
             OrderMinQuantity = orderMinQuantity;
             OrderMaxQuantity = orderMaxQuantity;
             MediaResources = mediaResources;
-            SpecifiedInventoryProviderName = specifiedInventoryProviderName;
             ProductDetailId = productDetailId;
+            
+            ExtraProperties = new ExtraPropertyDictionary();
+            this.SetDefaultsForExtraProperties();
         }
 
-        public void TrimCode()
+        internal void TrimCode()
         {
             Name = Name?.Trim();
         }

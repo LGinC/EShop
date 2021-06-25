@@ -12,7 +12,9 @@ $(function () {
         autoWidth: false,
         scrollCollapse: true,
         order: [[1, "asc"]],
-        ajax: abp.libs.datatables.createAjax(service.getList),
+        ajax: abp.libs.datatables.createAjax(service.getList, function () {
+            return { storeId: storeId }
+        }),
         columnDefs: [
             {
                 rowAction: {
@@ -30,7 +32,8 @@ $(function () {
             { data: "orderNumber" },
             { data: "customerUserId" },
             { data: "orderStatus" },
-            { data: "totalPrice" },
+            { data: "currency" },
+            { data: "actualTotalPrice" },
         ]
     }));
 });

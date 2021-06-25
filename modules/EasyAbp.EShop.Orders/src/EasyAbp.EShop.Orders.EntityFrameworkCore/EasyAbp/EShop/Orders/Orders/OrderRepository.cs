@@ -16,9 +16,11 @@ namespace EasyAbp.EShop.Orders.Orders
         {
         }
 
-        public override IQueryable<Order> WithDetails()
+        public override async Task<IQueryable<Order>> WithDetailsAsync()
         {
-            return base.WithDetails().Include(x => x.OrderLines);
+            return (await base.WithDetailsAsync())
+                .Include(x => x.OrderLines)
+                .Include(x => x.OrderExtraFees);
         }
 
         public override Task<Order> UpdateAsync(Order entity, bool autoSave = false, CancellationToken cancellationToken = new CancellationToken())

@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using Volo.Abp.Data;
 
 namespace EasyAbp.EShop.Products.Products
 {
+    [Serializable]
     public class ProductAttributeEto : IProductAttribute
     {
         public Guid Id { get; set; }
@@ -14,5 +16,7 @@ namespace EasyAbp.EShop.Products.Products
         public int DisplayOrder { get; set; }
         
         public ICollection<ProductAttributeOptionEto> ProductAttributeOptions { get; set; }
+        
+        public ExtraPropertyDictionary ExtraProperties { get; set; }
     }
 }

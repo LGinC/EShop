@@ -1,14 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
+using Volo.Abp.Data;
+using Volo.Abp.MultiTenancy;
 
 namespace EasyAbp.EShop.Products.Products
 {
-    public class ProductEto : IProduct
+    [Serializable]
+    public class ProductEto : IProduct, IMultiTenant
     {
+        public Guid? TenantId { get; set; }
+
         public Guid Id { get; set; }
         
-        public Guid ProductTypeId { get; set; }
+        public Guid StoreId { get; set; }
 
+        public string ProductGroupName { get; set; }
+        
         public Guid ProductDetailId { get; set; }
 
         public string UniqueName { get; set; }
@@ -27,7 +34,7 @@ namespace EasyAbp.EShop.Products.Products
 
         public bool IsHidden { get; set; }
         
-        public Dictionary<string, object> ExtraProperties { get; set; }
+        public ExtraPropertyDictionary ExtraProperties { get; set; }
         
         public ICollection<ProductAttributeEto> ProductAttributes { get; set; }
         

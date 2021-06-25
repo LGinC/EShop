@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using EasyAbp.EShop.Stores.EntityFrameworkCore;
@@ -16,7 +17,17 @@ namespace EasyAbp.EShop.Stores.Stores
 
         public async Task<Store> FindDefaultStoreAsync(CancellationToken cancellationToken = default)
         {
-            return await WithDetails().FirstOrDefaultAsync(cancellationToken: cancellationToken);
+            return await (await WithDetailsAsync()).FirstOrDefaultAsync(cancellationToken: cancellationToken);
+        }
+
+        public virtual async Task<IQueryable<Store>> GetQueryableOnlyOwnStoreAsync(Guid userId)
+        {
+            return (await GetDbSetAsync()).Join(
+                (await GetDbContextAsync()).StoreOwners.Where(storeOwner => storeOwner.OwnerUserId == userId),
+                store => store.Id,
+                storeOwner => storeOwner.StoreId,
+                (store, storeOwner) => store
+            );
         }
     }
 }

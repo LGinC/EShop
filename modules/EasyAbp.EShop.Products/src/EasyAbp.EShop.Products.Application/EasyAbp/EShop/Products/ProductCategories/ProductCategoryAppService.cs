@@ -1,10 +1,9 @@
+using EasyAbp.EShop.Products.Permissions;
+using EasyAbp.EShop.Products.ProductCategories.Dtos;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using EasyAbp.EShop.Products.Permissions;
-using EasyAbp.EShop.Products.ProductCategories.Dtos;
 using Volo.Abp;
-using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 
 namespace EasyAbp.EShop.Products.ProductCategories
@@ -21,7 +20,7 @@ namespace EasyAbp.EShop.Products.ProductCategories
             _repository = repository;
         }
 
-        protected override IQueryable<ProductCategory> CreateFilteredQuery(GetProductCategoryListDto input)
+        protected override async Task<IQueryable<ProductCategory>> CreateFilteredQueryAsync(GetProductCategoryListDto input)
         {
             var queryable = Repository.AsQueryable();
             

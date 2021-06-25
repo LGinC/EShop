@@ -7,8 +7,8 @@ using Volo.Abp.Application.Dtos;
 
 namespace EasyAbp.EShop.Products.ProductInventories
 {
-    [RemoteService(Name = "EShopProducts")]
-    [Route("/api/eShop/products/productInventory")]
+    [RemoteService(Name = "EasyAbpEShopProducts")]
+    [Route("/api/e-shop/products/product-inventory")]
     public class ProductInventoryController : ProductsController, IProductInventoryAppService
     {
         private readonly IProductInventoryAppService _service;

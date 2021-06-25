@@ -1,6 +1,8 @@
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 using EasyAbp.EShop.Payments.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Volo.Abp.Domain.Repositories.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore;
 
@@ -12,10 +14,15 @@ namespace EasyAbp.EShop.Payments.Refunds
         {
         }
 
-        public IQueryable<Refund> GetQueryableByUserId(Guid userId)
+        public override async Task<IQueryable<Refund>> WithDetailsAsync()
         {
-            return from refund in DbContext.Refunds
-                join payment in DbContext.Payments on refund.PaymentId equals payment.Id
+            return (await base.WithDetailsAsync()).Include(x => x.RefundItems);
+        }
+
+        public virtual async Task<IQueryable<Refund>> GetQueryableByUserIdAsync(Guid userId)
+        {
+            return from refund in (await GetDbContextAsync()).Refunds
+                join payment in (await GetDbContextAsync()).Payments on refund.PaymentId equals payment.Id
                 where payment.UserId == userId
                 select refund;
         }

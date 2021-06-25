@@ -1,8 +1,10 @@
 ﻿using System;
+using Volo.Abp.Data;
 
 namespace EasyAbp.EShop.Products.Products
 {
-    public class  ProductSkuEto : IProductSku
+    [Serializable]
+    public class ProductSkuEto : IProductSku
     {
         public Guid Id { get; set; }
 
@@ -23,5 +25,7 @@ namespace EasyAbp.EShop.Products.Products
         public string MediaResources { get; set; }
 
         public Guid? ProductDetailId { get; set; }
+        
+        public ExtraPropertyDictionary ExtraProperties { get; set; }
     }
 }

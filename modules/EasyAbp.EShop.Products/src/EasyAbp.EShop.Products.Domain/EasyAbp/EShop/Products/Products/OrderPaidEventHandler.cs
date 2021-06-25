@@ -33,9 +33,9 @@ namespace EasyAbp.EShop.Products.Products
         
         public virtual async Task HandleEventAsync(OrderPaidEto eventData)
         {
-            using var changeTenant = _currentTenant.Change(eventData.Order.TenantId);
-
             using var uow = _unitOfWorkManager.Begin(isTransactional: true);
+            
+            using var changeTenant = _currentTenant.Change(eventData.Order.TenantId);
 
             var models = new List<ConsumeInventoryModel>();
                 
@@ -58,8 +58,7 @@ namespace EasyAbp.EShop.Products.Products
                     continue;
                 }
 
-                if (!await _productManager.IsInventorySufficientAsync(product, productSku, eventData.Order.StoreId,
-                    orderLine.Quantity))
+                if (!await _productManager.IsInventorySufficientAsync(product, productSku, orderLine.Quantity))
                 {
                     await PublishResultEventAsync(eventData, false);
                     
@@ -77,8 +76,7 @@ namespace EasyAbp.EShop.Products.Products
 
             foreach (var model in models)
             {
-                if (await _productManager.TryReduceInventoryAsync(model.Product, model.ProductSku, model.StoreId,
-                    model.Quantity, true))
+                if (await _productManager.TryReduceInventoryAsync(model.Product, model.ProductSku, model.Quantity, true))
                 {
                     continue;
                 }

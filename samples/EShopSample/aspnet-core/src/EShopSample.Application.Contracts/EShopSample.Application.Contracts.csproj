@@ -10,18 +10,21 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\..\integration\EasyAbp.EShop\src\EasyAbp.EShop.Application.Contracts\EasyAbp.EShop.Application.Contracts.csproj" />
     <ProjectReference Include="..\..\..\..\..\plugins\Baskets\src\EasyAbp.EShop.Plugins.Baskets.Application.Contracts\EasyAbp.EShop.Plugins.Baskets.Application.Contracts.csproj" />
+    <ProjectReference Include="..\..\..\..\..\plugins\Coupons\src\EasyAbp.EShop.Plugins.Coupons.Application.Contracts\EasyAbp.EShop.Plugins.Coupons.Application.Contracts.csproj" />
     <ProjectReference Include="..\EShopSample.Domain.Shared\EShopSample.Domain.Shared.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="EasyAbp.PaymentService.Application.Contracts" Version="0.6.4" />
-    <PackageReference Include="EasyAbp.PaymentService.WeChatPay.Application.Contracts" Version="0.6.4" />
-    <PackageReference Include="Volo.Abp.ObjectExtending" Version="3.0.4" />
-    <PackageReference Include="Volo.Abp.Account.Application.Contracts" Version="3.0.4" />
-    <PackageReference Include="Volo.Abp.Identity.Application.Contracts" Version="3.0.4" />
-    <PackageReference Include="Volo.Abp.PermissionManagement.Application.Contracts" Version="3.0.4" />
-    <PackageReference Include="Volo.Abp.TenantManagement.Application.Contracts" Version="3.0.4" />
-    <PackageReference Include="Volo.Abp.FeatureManagement.Application.Contracts" Version="3.0.4" />
+    <PackageReference Include="EasyAbp.PaymentService.Application.Contracts" Version="$(EasyAbpPaymentServiceModuleVersion)" />
+    <PackageReference Include="EasyAbp.PaymentService.WeChatPay.Application.Contracts" Version="$(EasyAbpPaymentServiceModuleVersion)" />
+    <PackageReference Include="EasyAbp.PaymentService.Prepayment.Application.Contracts" Version="$(EasyAbpPaymentServiceModuleVersion)" />
+    <PackageReference Include="Volo.Abp.ObjectExtending" Version="$(AbpVersion)" />
+    <PackageReference Include="Volo.Abp.Account.Application.Contracts" Version="$(AbpVersion)" />
+    <PackageReference Include="Volo.Abp.Identity.Application.Contracts" Version="$(AbpVersion)" />
+    <PackageReference Include="Volo.Abp.PermissionManagement.Application.Contracts" Version="$(AbpVersion)" />
+    <PackageReference Include="Volo.Abp.TenantManagement.Application.Contracts" Version="$(AbpVersion)" />
+    <PackageReference Include="Volo.Abp.FeatureManagement.Application.Contracts" Version="$(AbpVersion)" />
+    <PackageReference Include="Volo.Abp.SettingManagement.Application.Contracts" Version="$(AbpVersion)" />
   </ItemGroup>
 
 </Project>

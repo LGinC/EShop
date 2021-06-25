@@ -7,8 +7,8 @@ using Volo.Abp.Application.Dtos;
 
 namespace EasyAbp.EShop.Products.Categories
 {
-    [RemoteService(Name = "EShopProducts")]
-    [Route("/api/eShop/products/category")]
+    [RemoteService(Name = "EasyAbpEShopProducts")]
+    [Route(ProductsConsts.CategoryRouteBase)]
     public class CategoryController : ProductsController, ICategoryAppService
     {
         private readonly ICategoryAppService _service;
@@ -49,6 +49,13 @@ namespace EasyAbp.EShop.Products.Categories
         public Task DeleteAsync(Guid id)
         {
             return _service.DeleteAsync(id);
+        }
+
+        [HttpGet]
+        [Route("summary")]
+        public async Task<PagedResultDto<CategorySummaryDto>> GetSummaryListAsync(GetCategoryListDto input)
+        {
+            return await _service.GetSummaryListAsync(input);
         }
     }
 }

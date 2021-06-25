@@ -7,8 +7,8 @@ using Volo.Abp.Application.Dtos;
 
 namespace EasyAbp.EShop.Orders.Orders
 {
-    [RemoteService(Name = "EShopOrders")]
-    [Route("/api/eShop/orders/order")]
+    [RemoteService(Name = "EasyAbpEShopOrders")]
+    [Route("/api/e-shop/orders/order")]
     public class OrderController : OrdersController, IOrderAppService
     {
         private readonly IOrderAppService _service;
@@ -54,17 +54,25 @@ namespace EasyAbp.EShop.Orders.Orders
         }
 
         [HttpGet]
-        [Route("byOrderNumber")]
+        [Route("by-order-number/{orderNumber}")]
         public Task<OrderDto> GetByOrderNumberAsync(string orderNumber)
         {
             return _service.GetByOrderNumberAsync(orderNumber);
         }
 
         [HttpPost]
-        [Route("complete")]
-        public Task<OrderDto> CompleteAsync(CompleteOrderInput input)
+        [Route("{id}/complete")]
+        public Task<OrderDto> CompleteAsync(Guid id)
         {
-            return _service.CompleteAsync(input);
+            return _service.CompleteAsync(id);
+        }
+
+        [HttpPost]
+        [Route("{id}/cancel")]
+        public Task<OrderDto> CancelAsync(Guid id, CancelOrderInput input)
+        {
+            return _service.CancelAsync(id, input);
+
         }
     }
 }

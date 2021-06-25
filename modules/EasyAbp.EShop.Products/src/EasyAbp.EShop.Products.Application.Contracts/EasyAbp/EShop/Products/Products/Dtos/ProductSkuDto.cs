@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using Volo.Abp.Application.Dtos;
+using Volo.Abp.Data;
 
 namespace EasyAbp.EShop.Products.Products.Dtos
 {
-    public class ProductSkuDto : FullAuditedEntityDto<Guid>
+    [Serializable]
+    public class ProductSkuDto : ExtensibleFullAuditedEntityDto<Guid>
     {
         public List<Guid> AttributeOptionIds { get; set; }
         
@@ -14,9 +16,6 @@ namespace EasyAbp.EShop.Products.Products.Dtos
         
         public decimal? OriginalPrice { get; set; }
         
-        /// <summary>
-        /// Price property in the ProductSku entity.
-        /// </summary>
         public decimal Price { get; set; }
         
         public decimal DiscountedPrice { get; set; }
@@ -31,8 +30,6 @@ namespace EasyAbp.EShop.Products.Products.Dtos
         
         public string MediaResources { get; set; }
         
-        public string SpecifiedInventoryProviderName { get; set; }
-
         public Guid? ProductDetailId { get; set; }
     }
 }
